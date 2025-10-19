@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tampilan Native Text (JS)</title>
+<link href="https://static.xx.fbcdn.net/rsrc.php/v5/yT/l/0,cross/RYoQlJMNiM3.css" rel="stylesheet" crossorigin="anonymous">
+<link href="https://static.xx.fbcdn.net/rsrc.php/v5/yv/l/0,cross/VraZqV-tU8r.css" rel="stylesheet" crossorigin="anonymous">
+<style>
+
+
+body {
+    padding:0;
+}
+
+.container05{
+  border:2px solid #1877f2;
+  background:rgba(24,119,242,0.08);
+  border-radius:12px;
+  display:flex;
+  flex-direction:column;
+  padding:5px;
+  box-shadow:0 3px 8px rgba(0,0,0,0.08);
+
+}
+
+.input-group {
+  display:flex;
+}
+
+#codeInput {
+  flex:0 0 70%;
+  padding:8px;
+  border-radius: 8px;
+  border: solid 0.5px #ccc ;
+  font-size:12px;
+  overflow-x:auto;
+  white-space:nowrap;
+  box-sizing:border-box;
+}
+
+#runBtn {
+  flex:0 0 26%;
+  padding:0px 15px;
+  font-size:12px;
+  margin-left:13px;
+  cursor:pointer;
+  background:green;
+  color:white;
+  border:none;
+  border-radius:8px;
+}
+
+
+
+.native-text-wrapper {
+  width: 100%;
+      margin-bottom: 10px;
+  max-height: 300px;
+  overflow-y: auto; 
+  overflow-x: auto; 
+  border: 1px solid rgba(24,119,242,0.3);
+  border-radius: 6px;
+  padding: 4px 0px; 
+  box-sizing: border-box;
+}
+
+:root { --cols: 10; --cell: 36px; --gap: 6px; }
+
+
+.native-text-wrapper {
+  width: 100%;
+  max-height: 540px;
+  overflow-y: auto;
+  overflow-x: auto;
+  border: 1px solid rgba(24,119,242,0.3);
+  border-radius: 6px;
+}
+
+.native-text {
+  justify-content:center;
+  align-items:center;
+  line-height:1;
+  white-space:nowrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, var(--cell));
+  gap: var(--gap);
+}
+
+.native-text .icon {
+  width:var(--cell);
+  height:var(--cell);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(24,119,242,0.12);
+  border-radius:4px;
+  box-sizing:border-box;
+  user-select:text;
+  font-size:24px;
+}
+
+@media (max-width:420px){
+  :root { --cols: 8; --cell: 35px; }
+  .native-text { font-size:25px; }
+}
+
+
+
+</style>
+</head>
+<body>
+
+<div class="container5">
+  <div style="display:flex; align-items:center; width:100%;">
+  <!-- Konten kiri tetap -->
+<div class="tommy" style="padding:0px 8px; font-family: normal;">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<user style="display:inline-block; font-size:13px;  font-weight:900; letter-spacing:1.3px; margin:0; line-height:1.2; position:relative;">
+  <user style="display:inline-block; transform: scaleX(1.1) scaleY(0.8); transform-origin:center;">Code Character </user>
+  <user style="position:absolute; bottom:0; left:-5px; width:calc(100% + 0px); border-bottom:0.5px solid #444;"></usee>
+</user>
+&nbsp;</user><p style="margin:4px 0 0 0; line-height:1.2; padding:0px 8px;"><user style="font-size:13px; font-weight:400; letter-spacing:1px; display:inline-block; transform: scaleX(1.1) scaleY(1); transform-origin:center;">Cari kelompok karakter kode contoh (0xDB00 
+atau 0x00) karakter run untuk tampilkan kelompok karakter</user>
+</div>
+       
+</div>
+    <div class="native-text-wrapper">
+    <div class="native-text"></div>
+  </div>
+  <div class="input-group">
+    <input type="text" id="codeInput" placeholder="Masukkan kode, pisahkan koma: 0xDB94,0xF0047">
+    <button id="runBtn">Run</button>
+  </div>
+</div>
+
+<script>
+const native = document.querySelector('.native-text');
+const input = document.getElementById('codeInput');
+const runBtn = document.getElementById('runBtn');
+
+function renderCodes(codes) {
+  native.innerHTML = '';
+  codes.forEach(codeStr => {
+    codeStr = codeStr.trim();
+    if (!codeStr) return;
+
+    try {
+      const code = parseInt(codeStr, 16);
+
+      if (code >= 0xD800 && code <= 0xDBFF) {
+        for (let lo = 0xDC00; lo <= 0xDFFF; lo++) {
+          const ch = String.fromCharCode(code, lo);
+          const span = document.createElement('span');
+          span.className = 'icon';
+          span.textContent = ch;
+          native.appendChild(span);
+        }
+      } else if (code >= 0x10000) {
+        const ch = String.fromCodePoint(code);
+        const span = document.createElement('span');
+        span.className = 'icon';
+        span.textContent = ch;
+        native.appendChild(span);
+      } else {
+        const ch = String.fromCharCode(code);
+        const span = document.createElement('span');
+        span.className = 'icon';
+        span.textContent = ch;
+        native.appendChild(span);
+      }
+    } catch(e) {
+      console.warn('Kode tidak valid:', codeStr);
+    }
+  });
+}
+
+runBtn.addEventListener('click', () => {
+  const codes = input.value.split(',');
+  renderCodes(codes);
+});
+</script>
+
+</body>
+</html>
