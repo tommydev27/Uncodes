@@ -105,6 +105,10 @@ body {
   .native-text { font-size:25px; }
 }
 
+body.dark {
+  background: #0d1117;
+  color: #e6edf3;
+}
 
 
 </style>
@@ -179,6 +183,15 @@ runBtn.addEventListener('click', () => {
   const codes = input.value.split(',');
   renderCodes(codes);
 });
+
+window.addEventListener("message", (e) => {
+  if (e.data.theme === "dark") {
+    document.body.classList.add("dark");
+  } else if (e.data.theme === "light") {
+    document.body.classList.remove("dark");
+  }
+});
+
 </script>
 
 </body>
